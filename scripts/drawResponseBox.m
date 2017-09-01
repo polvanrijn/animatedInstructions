@@ -1,4 +1,11 @@
-function w = drawResponseBox(w, rect, scale, padding, model, keyPressed, buttonImageArray)
+function w = drawResponseBox(w, rect, scale, padding, model, keyPressed, buttonImageArray, dir)
+
+% TODO
+% - moving finger
+% - standard colors response box
+% - different models of response boxes
+% - click multiple keys simultaniously
+
 size = [0 0 507 331];
 if model == 1
     % button 1-4 big buttons, left to right, up to down
@@ -21,7 +28,6 @@ end
 size = size*scale;
 coordinates = coordinates * scale;
 
-
 % apply padding
 size = addPadding(size, padding);
 
@@ -31,7 +37,7 @@ end
 
 
 % draw
-w = createTexture(w, 'box.png', size, 1);
+w = createTexture(w, [dir.img, 'box.png'], size, 1);
 
 for button = 1:numButtons
     coordinate = [coordinates(button, 1), coordinates(button, 2), coordinates(button, 3), coordinates(button, 4)];
@@ -41,10 +47,10 @@ for button = 1:numButtons
         if keyPressed == button
             d = -1*20*scale;
             newCoordinate = editCoordinates(coordinate, [d, d, d, d]);
-            w = createTexture(w, 'bigButtonOn.png', newCoordinate, 1);
+            w = createTexture(w, [dir.img, 'bigButtonOn.png'], newCoordinate, 1);
             
         else
-            w = createTexture(w, 'bigButton.png', coordinate, 1);
+            w = createTexture(w, [dir.img, 'bigButton.png'], coordinate, 1);
         end
     else
         % small button
@@ -52,12 +58,15 @@ for button = 1:numButtons
         if keyPressed == button
             d = -1*14*scale;
             newCoordinate = editCoordinates(coordinate, [d, d, d, d]);
-            w = createTexture(w, 'smallButtonOn.png', newCoordinate, 1);
+            w = createTexture(w, [dir.img, 'smallButtonOn.png'], newCoordinate, 1);
         else
-            w = createTexture(w, 'smallButton.png', coordinate, 1);
+            w = createTexture(w, [dir.img, 'smallButton.png'], coordinate, 1);
         end
     end
-    
+    if keyPressed == button
+        hCenter = getCenter(newCoordinate, 'h');
+        vCenter = getCenter(newCoordinate, 'v');
+    end
     border = border * scale;
     
     % draw custom button if specified
@@ -66,5 +75,7 @@ for button = 1:numButtons
         coordinate = editCoordinates(coordinate, border);
         w = createTexture(w, buttonImageArray{button}, coordinate);
     end
+    
+    
 end
 
