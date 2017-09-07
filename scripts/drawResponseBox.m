@@ -1,4 +1,4 @@
-function w = drawResponseBox(w, rect, scale, padding, model, keyPressed, buttonImageArray, dir)
+function [w, size, coordinates] = drawResponseBox(w, rect, scale, padding, model, keyPressed, buttonImageArray, dir)
 
 % TODO
 % - moving finger
